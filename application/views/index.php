@@ -84,7 +84,7 @@
 
         function createPod() {
             $.ajax({
-                url: 'pod/create',
+                url: 'index.php/pod/create',
                 type: 'POST',
                 data: {
                     'csrf_test_name': '<?= $this->security->get_csrf_hash(); ?>' // Include CSRF token
@@ -112,7 +112,7 @@
 
         function deletePod() {
             $.ajax({
-                url: 'pod/delete',
+                url: 'index.php/pod/delete',
                 type: 'POST', // Use POST for CSRF protection
                 data: {
                     'csrf_test_name': '<?= $this->security->get_csrf_hash(); ?>' // Include CSRF token
