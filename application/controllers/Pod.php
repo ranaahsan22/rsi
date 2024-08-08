@@ -12,7 +12,7 @@ class Pod extends CI_Controller {
         try {
             log_message('info', 'Creating pod...');
     
-            $command = '/var/www/html/rsi/run_microk8s.sh /snap/bin/microk8s kubectl apply -f 4mb-pod.yaml 2>&1';
+            $command = '/var/www/html/rsi/run_microk8s.sh /snap/bin/microk8s kubectl apply -f /home/4mb-pod.yaml 2>&1';
     
             $output = [];
             $return_var = null;
@@ -38,7 +38,7 @@ class Pod extends CI_Controller {
         try {
             log_message('info', 'Deleting pod...');
     
-            $command = '/var/www/html/rsi/run_microk8s.sh /snap/bin/microk8s kubectl delete pod 4mb-pod 2>&1';
+            $command = '/var/www/html/rsi/run_microk8s.sh /snap/bin/microk8s kubectl delete pod /home/4mb-pod 2>&1';
     
             $output = [];
             $return_var = null;
