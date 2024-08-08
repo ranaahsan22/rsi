@@ -13,7 +13,10 @@ class Pod extends CI_Controller {
             // Add your logic to create a pod here
             log_message('info', 'Creating pod...');
     
-            // Prepare the command and redirect stderr to stdout
+            // Set the HOME environment variable to a valid directory within /home
+            putenv('HOME=/home/your-username'); // Replace 'your-username' with the actual username
+    
+            // Use the full path to microk8s and redirect stderr to stdout
             $command = '/snap/bin/microk8s kubectl apply -f 4mb-pod.yaml 2>&1';
     
             // Execute the command and capture the output and return status
@@ -39,6 +42,7 @@ class Pod extends CI_Controller {
             echo json_encode(['error' => 'An error occurred while creating the pod.', 'details' => $e->getMessage()]);
         }
     }
+    
 
     public function delete() {
         header('Content-Type: application/json');
@@ -46,7 +50,10 @@ class Pod extends CI_Controller {
             // Add your logic to delete a pod here
             log_message('info', 'Deleting pod...');
     
-            // Prepare the command and redirect stderr to stdout
+            // Set the HOME environment variable to a valid directory within /home
+            putenv('HOME=/home/your-username'); // Replace 'your-username' with the actual username
+    
+            // Use the full path to microk8s and redirect stderr to stdout
             $command = '/snap/bin/microk8s kubectl delete pod 4mb-pod 2>&1';
     
             // Execute the command and capture the output and return status
@@ -72,5 +79,6 @@ class Pod extends CI_Controller {
             echo json_encode(['error' => 'An error occurred while deleting the pod.', 'details' => $e->getMessage()]);
         }
     }
+    
     
 }
