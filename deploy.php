@@ -1,30 +1,86 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Command to execute the wrapper script
-    $command = 'sudo /usr/local/bin/deploy-pod.sh';
+    if (isset($_POST['action']) && $_POST['action'] == 'deploy') {
+        // Command to deploy the pod
+        $command = 'echo "rsi@123" | sudo -S /usr/local/bin/deploy-pod.sh 2>&1';
+        $output = shell_exec($command);
 
-    // Execute the command and capture the output and return status
-    $output = [];
-    $return_var = 0;
-    exec($command, $output, $return_var);
+        // Send JSON response to start the countdown
+        echo json_encode(['status' => 'deleted', 'output' => $output]);
+        exit();
+    } elseif (isset($_POST['action']) && $_POST['action'] == 'delete') {
+        // Command to delete the pod
+        $command = 'echo "rsi@123" | sudo -S /usr/local/bin/delete-pod.sh 2>&1';
+        $output = shell_exec($command);
 
-    // Display the output and return status
-    echo "<pre>";
-    echo "Command executed: $command\n";
-    echo "Return status: $return_var\n";
-    echo "Output:\n";
-    echo implode("\n", $output);
-    echo "</pre>";
+        // Send JSON response indicating pod deletion
+        echo json_encode(['status' => 'deleted', 'output' => $output]);
+        exit();
+    }
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Deploy Pod</title>
+    <script>
+        function startCountdown(seconds) {
+            let countdownElement = document.getElementById('countdown-timer');
+            let timeRemaining = seconds;
+
+            let countdownInterval = setInterval(() => {
+                let minutes = Math.floor(timeRemaining / 60);
+                let seconds = timeRemaining % 60;
+                countdownElement.innerText = `Time remaining: ${minutes}m ${seconds}s`;
+
+                if (timeRemaining <= 0) {
+                    clearInterval(countdownInterval);
+                    deletePod(); // Automatically delete the pod after countdown
+                }
+
+                timeRemaining--;
+            }, 1000);
+        }
+
+        function deletePod() {
+            fetch('', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'action=delete'
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('output').innerText = 'Pod deleted.\n' + data.output;
+            });
+        }
+
+        document.getElementById('deploy-button').addEventListener('click', function() {
+            // Disable button to prevent multiple clicks
+            this.disabled = true;
+
+            // Start deployment via AJAX
+            fetch('', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'action=deploy'
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('output').innerText = 'Pod deployed successfully.\n' + data.output;
+                startCountdown(120); // Start 2-minute countdown
+            });
+        });
+    </script>
 </head>
 <body>
-    <form method="post">
-        <button type="submit">Deploy Pod</button>
-    </form>
+    <h1>Deploy Pod</h1>
+    <button id="deploy-button">Deploy Pod</button>
+    <p id="countdown-timer"></p>
+    <pre id="output"></pre>
 </body>
 </html>
