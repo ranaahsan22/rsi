@@ -24,7 +24,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Deploy Pod</title>
-    <script>
+</head>
+<body>
+    <h1>Deploy Pod</h1>
+    <button id="deploy-button">Deploy Pod</button>
+    <p id="countdown-timer"></p>
+    <pre id="output"></pre>
+</body>
+<script>
         function startCountdown(seconds) {
             let countdownElement = document.getElementById('countdown-timer');
             let timeRemaining = seconds;
@@ -76,11 +83,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             });
         });
     </script>
-</head>
-<body>
-    <h1>Deploy Pod</h1>
-    <button id="deploy-button">Deploy Pod</button>
-    <p id="countdown-timer"></p>
-    <pre id="output"></pre>
-</body>
 </html>
