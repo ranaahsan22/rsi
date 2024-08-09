@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             .then(response => response.json())
             .then(data => {
                 document.getElementById('output').innerText = 'Pod deployed successfully.\n' + data.output;
-                startCountdown(120); // Start 2-minute countdown
+                startCountdown(60); // Start 2-minute countdown
             });
         });
     </script>
